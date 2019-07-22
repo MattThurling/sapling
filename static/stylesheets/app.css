@@ -1,37 +1,21 @@
-
- .jumbotron {
-     height: 100vh;
-     background-image:url("/static/stylesheets/sapling.jpg");
-     background-repeat: no-repeat;
-     background-size: cover;
- }
-
-.jumbotron h1 {
-    font-size: 80px;
-    font-family: arvo;
-    font-weight: 300;
-    letter-spacing: 6px;
+body {
+    font-family: 'Nunito';
 }
 
-.jumbotron h3 {
-    font-weight: 300;
+.hero {
+    background-color: #4A6670;
 }
 
-.jumbotron h1, .jumbotron h3 {
+#title {
+    height: 300px;
+}
+
+h1 {
     color: white;
+    size: 3em;
 }
 
-.course-panel {
-    padding: 20px;
+#content {
+    margin-top: 50px;
 }
 
-
-.jumbotron .container {
-    position: relative;
-    top:30%;
-    text-align: left;
-}
-
-.navbar-inverse {
-    margin-bottom: 0;
-}
