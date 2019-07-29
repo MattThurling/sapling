@@ -20,20 +20,7 @@
 
     <!--Warning: Use a specific version in production. (e.g. https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@6/dist/dbr.min.js)-->
     <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode/dist/dbr.min.js"></script>
-
-    <script>
-        // https://www.dynamsoft.com/CustomerPortal/Portal/TrialLicense.aspx
-        BarcodeReader.licenseKey = 't0068NQAAAA9xqcBsrb1DuHpiuyXSc3C7EdWbaxEagkUKVVNMdGTtUkeW4rNjxGV0DkaMn5OldSQJsnhkVKrT1os5WZDlvIU=';
-        let scanner = new BarcodeReader.Scanner({
-            onFrameRead: results => {console.log(results);},
-            onNewCodeRead: (txt, result) => {alert(txt);}
-        });
-        scanner.open().catch(ex=>{
-            console.log(ex);
-            alert(ex.message || ex);
-            scanner.close();
-        });
-    </script>
+    <script src="/static/js/scan.js"></script>
 
 
 </body>
