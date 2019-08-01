@@ -1,23 +1,82 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"github.com/julienschmidt/httprouter"
+	_ "github.com/lib/pq"
 	"html/template"
+	"io/ioutil"
+	"log"
 	"net/http"
 )
 
 var templates *template.Template
+var db *sql.DB
 
-func home(w http.ResponseWriter, r *http.Request){
+type Product struct {
+	id uint
+	code string
+	carbon int
+}
+
+func home(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 	templates.ExecuteTemplate(w, "home.gohtml", "")
 }
 
-func scan(w http.ResponseWriter, r *http.Request){
+func scan(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 	templates.ExecuteTemplate(w, "scan.gohtml", "")
 }
 
-func forest(w http.ResponseWriter, r *http.Request){
+func forest(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 	templates.ExecuteTemplate(w, "forest.gohtml", "")
+}
+
+func showProduct(w http.ResponseWriter, r *http.Request, ps httprouter.Params){
+	// Look up product
+	u := "https://api.barcodelookup.com/v2/products?barcode=" + ps.ByName("code") + "&formatted=y&key=uq257lzb7kcgvpu5yfijlgfyz2dsf4"
+	fmt.Println(u)
+	resp, _ := http.Get(u)
+
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	bs := string(body)
+
+	//p := Product{}
+	//row := db.QueryRow("SELECT * FROM products WHERE id = $1", c)
+	//err := row.Scan(&p.id, &p.code, &p.carbon)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//
+	//switch {
+	//case err == sql.ErrNoRows:
+	//	http.NotFound(w, r)
+	//	return
+	//case err != nil:
+	//	http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+	//	return
+	//}
+	templates.ExecuteTemplate(w, "product.gohtml", bs)
+}
+
+//Set up connection to the database
+func init() {
+	var err error
+	db, err = sql.Open("postgres", "postgres://postgres:21satoshi@localhost:5433/sapling?sslmode=disable")
+	if err != nil {
+		panic(err)
+	}
+
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Connected to database")
 }
 
 
@@ -29,24 +88,17 @@ func main() {
 
 	templates = template.Must(template.ParseGlob("templates/*.gohtml"))
 
-	//Our HTML comes with CSS that go needs to provide when we run the app. Here we tell go to create
-	// a handle that looks in the static directory, go then uses the "/static/" as a url that our
-	//html can refer to when looking for our css and other files.
 
-	http.Handle("/static/", //final url can be anything
-		http.StripPrefix("/static/",
-			http.FileServer(http.Dir("static")))) //Go looks in the relative "static" directory first using http.FileServer(), then matches it to a
-	//url of our choice as shown in http.Handle("/static/"). This url is what we need when referencing our css files
-	//once the server begins. Our html code would therefore be <link rel="stylesheet"  href="/static/stylesheet/...">
-	//It is important to note the url in http.Handle can be whatever we like, so long as we are consistent.
+	router := httprouter.New()
 
+	router.GET("/", home)
+	router.GET("/scan", scan)
+	router.GET("/forest", forest)
+	router.GET("/product/:code", showProduct)
 
-	http.HandleFunc("/", home)
-	http.HandleFunc("/scan", scan)
-	http.HandleFunc("/forest", forest)
+	router.ServeFiles("/static/*filepath", http.Dir("static"))
 
-	//Start the web server, set the port to listen to 8080. Without a path it assumes localhost
-	//Print any errors from starting the webserver using fmt
-	fmt.Println("Listening")
-	fmt.Println(http.ListenAndServe(":8080", nil))
+	log.Fatal(fmt.Println(http.ListenAndServe(":8080", router)))
+
+	db.Close()
 }
