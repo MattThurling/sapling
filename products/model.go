@@ -3,7 +3,7 @@ package products
 import (
 	"errors"
 	"fmt"
-	"github.com/globalsign/mgo/bson"
+	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 	"sapling/config"
 )
@@ -77,14 +77,17 @@ type Product struct {
 	} `json:"productAttributes"`
 }
 
-func All() ([]Product, error) {
-	ps := []Product{}
-	err := config.Products.Find(bson.M{}).All(&ps)
-	if err != nil {
-		return nil, err
-	}
-	return ps, nil
-}
+//func All() ([]Product, error) {
+//	ps := []Product{}
+//	err := config.Products.Find(config.CTX, bson.D{})
+//
+//	//err := config.Products.Find(config.CTX, bson.D{}).All(&ps)
+//
+//	if err != nil {
+//		return nil, err
+//	}
+//	return ps, nil
+//}
 
 func One(r *http.Request) (Product, error) {
 	p := Product{}
@@ -95,9 +98,9 @@ func One(r *http.Request) (Product, error) {
 	}
 
 	//Does the Gtin exist in the database?
-	err := config.Products.Find(bson.M{"gtin": gtin}).One(&p)
+	err := config.Products.FindOne(config.CTX, bson.M{"gtin": gtin}).Decode(&p)
 	fmt.Println(err)
-	if err.Error() == "not found" {
+	if err.Error() == "mongo: no documents in result" {
 		// No. Let's ask Tesco about it...
 		p = CallApi(gtin)
 	}
@@ -105,43 +108,43 @@ func One(r *http.Request) (Product, error) {
 	return p, nil
 }
 
-func Put(r *http.Request) (Product, error) {
-	// get form values
-	p := Product{}
-	p.Gtin = r.FormValue("gtin")
-
-	// insert values
-	err := config.Products.Insert(p)
-	if err != nil {
-		return p, errors.New("500. Internal Server Error." + err.Error())
-	}
-	return p, nil
-}
-
-func Update(r *http.Request) (Product, error) {
-	// get form values
-	p := Product{}
-	p.Gtin = r.FormValue("gtin")
-
-	// update values
-	err := config.Products.Update(bson.M{"gtin": p.Gtin}, &p)
-	if err != nil {
-		return p, err
-	}
-	return p, nil
-}
-
-func Delete(r *http.Request) error {
-	gtin := r.FormValue("gtin")
-	if gtin == "" {
-		return errors.New("400. Bad Request.")
-	}
-
-	err := config.Products.Remove(bson.M{"gtin": gtin})
-	if err != nil {
-		return errors.New("500. Internal Server Error")
-	}
-	return nil
-}
+//func Put(r *http.Request) (Product, error) {
+//	// get form values
+//	p := Product{}
+//	p.Gtin = r.FormValue("gtin")
+//
+//	// insert values
+//	err := config.Products.InsertOne(config.CTX, p)
+//	if err != nil {
+//		return p, errors.New("500. Internal Server Error." + err.Error())
+//	}
+//	return p, nil
+//}
+//
+//func Update(r *http.Request) (Product, error) {
+//	// get form values
+//	p := Product{}
+//	p.Gtin = r.FormValue("gtin")
+//
+//	// update values
+//	err := config.Products.Update(bson.M{"gtin": p.Gtin}, &p)
+//	if err != nil {
+//		return p, err
+//	}
+//	return p, nil
+//}
+//
+//func Delete(r *http.Request) error {
+//	gtin := r.FormValue("gtin")
+//	if gtin == "" {
+//		return errors.New("400. Bad Request.")
+//	}
+//
+//	err := config.Products.Remove(bson.M{"gtin": gtin})
+//	if err != nil {
+//		return errors.New("500. Internal Server Error")
+//	}
+//	return nil
+//}
 
 

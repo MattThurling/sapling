@@ -1,29 +1,23 @@
 package config
 
 import (
+	"context"
 	"fmt"
-	"github.com/globalsign/mgo"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
+	"time"
 )
 
-// database
-var DB *mgo.Database
-
-// collections
-var Products *mgo.Collection
+var CTX context.Context
+var Products *mongo.Collection
 
 func init() {
-	// get a mongo session
-	s, err := mgo.Dial("mongodb://sapling:password@localhost/sapling")
-	if err != nil {
-		panic(err)
-	}
+	// get a mongo context
+	CTX, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	client, err := mongo.Connect(CTX, options.Client().ApplyURI("mongodb+srv://sapling:nHYuR4vtCeKUWPfz@cluster0-qe9ag.gcp.mongodb.net/test?w=majority"))
+	if err != nil { log.Fatal(err) }
 
-	if err = s.Ping(); err != nil {
-		panic(err)
-	}
-
-	DB = s.DB("sapling")
-	Products = DB.C("products")
-
+	Products = client.Database("sapling").Collection("products")
 	fmt.Println("You connected to your mongo database.")
 }

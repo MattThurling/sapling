@@ -31,7 +31,7 @@ func CallApi(g string) Product {
 	p := a.Products[0]
 
 	// Persist to the db
-	err = config.Products.Insert(p)
+	_, err = config.Products.InsertOne(config.CTX, p)
 
 	if err != nil {
 		fmt.Println(err)
