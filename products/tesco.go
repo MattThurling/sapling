@@ -1,6 +1,7 @@
 package products
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -31,7 +32,7 @@ func CallApi(g string) Product {
 	p := a.Products[0]
 
 	// Persist to the db
-	_, err = config.Products.InsertOne(config.CTX, p)
+	_, err = config.Products.InsertOne(context.TODO(), p)
 
 	if err != nil {
 		fmt.Println(err)

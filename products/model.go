@@ -1,6 +1,7 @@
 package products
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
@@ -77,49 +78,44 @@ type Product struct {
 	} `json:"productAttributes"`
 }
 
-//func All() ([]Product, error) {
-//	ps := []Product{}
-//	err := config.Products.Find(config.CTX, bson.D{})
-//
-//	//err := config.Products.Find(config.CTX, bson.D{}).All(&ps)
-//
-//	if err != nil {
-//		return nil, err
-//	}
-//	return ps, nil
-//}
-
+//Searches the db by gtin for a product and if it can't find one, calls the Tesco API
 func One(r *http.Request) (Product, error) {
 	p := Product{}
 
-	gtin := r.FormValue("gtin")
-	if gtin == "" {
+	g := r.FormValue("gtin")
+	if g == "" {
 		return p, errors.New("400. Bad Request.")
 	}
 
 	//Does the Gtin exist in the database?
-	err := config.Products.FindOne(config.CTX, bson.M{"gtin": gtin}).Decode(&p)
+	//For some reason, Tesco add a leading 0 to the gtin
+	tg := "0" + g
+	filter := bson.D{{"gtin", tg}}
+	err := config.Products.FindOne(context.TODO(), filter).Decode(&p)
 	fmt.Println(err)
+	if err == nil {return p, nil}//calling this here to avoid problem with logic on empty error
+
 	if err.Error() == "mongo: no documents in result" {
 		// No. Let's ask Tesco about it...
-		p = CallApi(gtin)
+		p = CallApi(g)
 	}
 
 	return p, nil
 }
 
-//func Put(r *http.Request) (Product, error) {
-//	// get form values
-//	p := Product{}
-//	p.Gtin = r.FormValue("gtin")
-//
-//	// insert values
-//	err := config.Products.InsertOne(config.CTX, p)
-//	if err != nil {
-//		return p, errors.New("500. Internal Server Error." + err.Error())
-//	}
-//	return p, nil
-//}
+func Put(r *http.Request) (Product, error) {
+	// get form values
+	p := Product{}
+	//p.Gtin = r.FormValue("gtin")
+
+	// insert values
+	i, err := config.Products.InsertOne(context.TODO(), p)
+	if err != nil {
+		return p, errors.New("500. Internal Server Error." + err.Error())
+	}
+	fmt.Println(i.InsertedID)
+	return p, nil
+}
 //
 //func Update(r *http.Request) (Product, error) {
 //	// get form values
