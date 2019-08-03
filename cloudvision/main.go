@@ -11,8 +11,8 @@ import (
 
 
 
-// detectText gets text from the Vision API for an image at the given file path.
-func detectText(w io.Writer, file string) error {
+// DetectText gets text from the Vision API for an image at the given file path.
+func DetectText(w io.Writer, file string) error {
 	ctx := context.Background()
 
 	client, err := vision.NewImageAnnotatorClient(ctx)

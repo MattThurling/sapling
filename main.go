@@ -40,6 +40,7 @@ func main() {
 	router.GET("/forest", forest)
 	router.GET("/product", products.Show)
 	router.GET("/product/create", products.Create)
+	router.POST("/product/create", products.Store)
 
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
 
