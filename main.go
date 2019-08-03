@@ -39,7 +39,7 @@ func main() {
 	router.GET("/scan", scan)
 	router.GET("/forest", forest)
 	router.GET("/product", products.Show)
-	router.GET("/put", products.PutRoute)
+	router.GET("/product/create", products.Create)
 
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
 
