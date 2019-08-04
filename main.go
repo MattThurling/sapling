@@ -25,8 +25,8 @@ func scan(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 	config.TPL.ExecuteTemplate(w, "scan.gohtml", "")
 }
 
-func forest(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
-	config.TPL.ExecuteTemplate(w, "forest.gohtml", "")
+func iframe(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
+	config.TPL.ExecuteTemplate(w, "iframe.gohtml", "")
 }
 
 
@@ -37,7 +37,7 @@ func main() {
 
 	router.GET("/", home)
 	router.GET("/scan", scan)
-	router.GET("/forest", forest)
+	router.GET("/iframe", iframe)
 	router.GET("/product", products.Show)
 	router.GET("/product/create", products.Create)
 	router.POST("/product/create", products.Store)

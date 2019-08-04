@@ -1,78 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <head>
-
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" href="/static/stylesheets/app.css">
-
-        <title>Sapling - Product</title>
-    </head>
+    {{template "head.gohtml"}}
     <body>
-
-        <div class="container mt-3">
-            <div class="row">
-                <div class="col text-center">
-                    <h2>{{.Description}}</h2>
+        {{template "nav.gohtml"}}
+        <div class="container">
+            <div class="row mt-4">
+                    <div class="col text-center">
+                        <h2>{{.Description}}</h2>
+                    </div>
                 </div>
+
+                <div class="row">
+                    <div class="col">
+                    </div>
+                    <div class="col-6 text-center">
+                        <!-- <img src="http://img.tesco.com/Groceries/pi/718/5018922117718/IDShot_90x90.jpg" class="img-fluid"> -->
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+
+                <div class="card w-100 mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Carbon: <span class="text-danger">80g</span>
+                        </h5>
+                        <p class="card-text">Our team of smart humans and dumb robots have estimated the impact using the ISO 14067 framework. Please help improve accuracy 🤖</p>
+                        <a href="#" class="btn btn-info">Submit a Product Impact Report</a>
+
+                    </div>
+                </div>
+
+                <table class="table mt-3">
+                    <tbody>
+                        <tr>
+                            <td>Weight</td>
+                            <td>{{.QtyContents.NetContents}}</td>
+                        </tr>
+                        <tr>
+                            <td>Origin</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Packaging</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Price</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Protein</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Carbs</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Fat</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
-
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col-6 text-center">
-                    <!-- <img src="http://img.tesco.com/Groceries/pi/718/5018922117718/IDShot_90x90.jpg" class="img-fluid"> -->
-                </div>
-                <div class="col">
-                </div>
-            </div>
-
-            <div class="card w-100 mt-3">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        Carbon: <span class="text-danger">80g</span>
-                    </h5>
-                    <p class="card-text">Our team of smart humans and dumb robots have estimated the impact using the ISO 14067 framework. Please help improve accuracy 🤖</p>
-                    <a href="#" class="btn btn-info">Submit a Product Impact Report</a>
-
-                </div>
-            </div>
-
-            <table class="table mt-3">
-                <tbody>
-                    <tr>
-                        <td>Weight</td>
-                        <td>{{.QtyContents.NetContents}}</td>
-                    </tr>
-                    <tr>
-                        <td>Origin</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Packaging</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Price</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Protein</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Carbs</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Fat</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-
         </div>
 
     </body>

@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="/static/stylesheets/app.css">
-
-    <title>Sapling - Scan</title>
-</head>
+{{template "head.gohtml"}}
 <body>
+    {{template "nav.gohtml"}}
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col text-center">
+                <h2>Scan a Product</h2>
+                <p>Find out about any product's carbon footprint by scanning with the beta AI Carbon Classifier.</p>
+                <p>Tip: the scanner is still being tweaked so please hold the item still with the barcode center frame, close to the lens.</p>
+            </div>
+        </div>
 
-<p>Please check if there are any remaining cameras available for connection.</p>
-<p>
-    Opening the camera at a non-secure site may fail.
-    Please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#Security" target="_blank">this</a>
-    for more info.
-</p>
-
-<!--Warning: Use a specific version in production. (e.g. https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@6/dist/dbr.min.js)-->
-<script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode/dist/dbr.min.js"></script>
-<script src="/static/js/scan.js"></script>
+        <div class="row">
+            <div class="col-3 d-none d-lg-block">
+            </div>
+            <div class="col">
+                <div class="embed-responsive embed-responsive-4by3">
+                    <iframe class="embed-responsive-item" src="/iframe"></iframe>
+                </div>
+            </div>
+            <div class="col-3 d-none d-lg-block">
+            </div>
+        </div>
+    </div>
 
 
 </body>
