@@ -29,7 +29,11 @@ func Show(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		http.Redirect(w, r, "/product/create", 303)
 	}
 
-	config.TPL.ExecuteTemplate(w, "product.gohtml", p)
+	err = config.TPL.ExecuteTemplate(w, "product.gohtml", p)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 //Show the form for creating a new product

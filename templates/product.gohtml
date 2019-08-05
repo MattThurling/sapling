@@ -25,42 +25,30 @@
                         <h5 class="card-title">
                             Carbon: <span class="text-danger">80g</span>
                         </h5>
-                        <p class="card-text">Our team of smart humans and dumb robots have estimated the impact using the ISO 14067 framework. Please help improve accuracy 🤖</p>
-                        <a href="#" class="btn btn-info">Submit a Product Impact Report</a>
+                        <p class="card-text">We estimated the impact using the <a href="https://www.iso.org/standard/71206.html">ISO 14067 standard</a>.</p>
 
                     </div>
                 </div>
 
+
+
                 <table class="table mt-3">
                     <tbody>
+
                         <tr>
                             <td>Weight</td>
                             <td>{{.QtyContents.NetContents}}</td>
                         </tr>
-                        <tr>
-                            <td>Origin</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Packaging</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Price</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Protein</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Carbs</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Fat</td>
-                            <td></td>
-                        </tr>
+
+                        {{ if .CalcNutrition}}
+                            {{ range .CalcNutrition.CalcNutrients}}
+                                <tr>
+                                    <td>{{ .Name}}</td>
+                                    <td>{{ .ValuePerServing}}</td>
+                                </tr>
+
+                            {{end}}
+                        {{end}}
                     </tbody>
                 </table>
 
