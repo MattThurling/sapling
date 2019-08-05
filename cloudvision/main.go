@@ -37,8 +37,8 @@ func DetectText(w io.Writer, file string) ([]*pb.EntityAnnotation, error) {
 	}
 
 	if len(annotations) == 0 {
-		err.Error() = "No text found"
-		return nil, err
+
+		return nil, fmt.Errorf("no text found")
 	}
 
 	return annotations, nil

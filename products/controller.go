@@ -66,6 +66,6 @@ func Store(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	io.Copy(nf, mf)
 
 	annotations, err := cloudvision.DetectText(w, path)
-	config.TPL.ExecuteTemplate(w, "product-create.gohtml", annotations)
+	config.TPL.ExecuteTemplate(w, "product-create.gohtml", annotations[0].Description)
 
 }
