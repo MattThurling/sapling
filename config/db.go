@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
+	"os"
 )
 
 var Db *sql.DB
@@ -11,10 +12,11 @@ var Db *sql.DB
 //Set up connection to the database
 func init() {
 	var err error
+	datastoreName := os.Getenv("POSTGRES_CONNECTION")
 	Db, err = sql.Open(
 		"postgres",
 		//"postgres://postgres:21satoshi@localhost:5433/sapling?sslmode=disable"
-		"postgres://postgres:HJ7hyalql2mkMFp7@/sapling?host=/cloudsql/sapling:europe-west1:sapling",
+		datastoreName,
 		)
 	if err != nil {
 		panic(err)
