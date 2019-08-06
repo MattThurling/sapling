@@ -1,13 +1,13 @@
 package products
 
 import (
-	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 	"sapling/config"
 )
+
 
 type Product struct {
 	Gtin        string `json:"gtin"`
@@ -90,12 +90,22 @@ func One(r *http.Request) (Product, error) {
 	//Does the Gtin exist in the database?
 	//For some reason, Tesco add a leading 0 to the gtin
 	tg := "0" + g
-	filter := bson.D{{"gtin", tg}}
-	err := config.Products.FindOne(context.TODO(), filter).Decode(&p)
-	fmt.Println(err)
-	if err == nil {return p, nil}//calling this here to avoid problem with logic on empty error
 
-	if err.Error() == "mongo: no documents in result" {
+	row := config.Db.QueryRow("SELECT info FROM products WHERE gtin = $1", tg)
+	// Whack the JSON into a string
+	var col string
+	err := row.Scan(&col)
+
+	if err == nil {
+		err = json.Unmarshal([]byte(col), &p)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			return p, nil
+		}
+	}
+
+	if err.Error() == "sql: no rows in result set" {
 		// No. Let's ask Tesco about it...
 		p = CallApi(g)
 	}
@@ -109,38 +119,13 @@ func Put(r *http.Request) (Product, error) {
 	//p.Gtin = r.FormValue("gtin")
 
 	// insert values
-	i, err := config.Products.InsertOne(context.TODO(), p)
-	if err != nil {
-		return p, errors.New("500. Internal Server Error." + err.Error())
-	}
-	fmt.Println(i.InsertedID)
+	//i, err := config.Products.InsertOne(context.TODO(), p)
+	//if err != nil {
+	//	return p, errors.New("500. Internal Server Error." + err.Error())
+	//}
+	//fmt.Println(i.InsertedID)
 	return p, nil
 }
-//
-//func Update(r *http.Request) (Product, error) {
-//	// get form values
-//	p := Product{}
-//	p.Gtin = r.FormValue("gtin")
-//
-//	// update values
-//	err := config.Products.Update(bson.M{"gtin": p.Gtin}, &p)
-//	if err != nil {
-//		return p, err
-//	}
-//	return p, nil
-//}
-//
-//func Delete(r *http.Request) error {
-//	gtin := r.FormValue("gtin")
-//	if gtin == "" {
-//		return errors.New("400. Bad Request.")
-//	}
-//
-//	err := config.Products.Remove(bson.M{"gtin": gtin})
-//	if err != nil {
-//		return errors.New("500. Internal Server Error")
-//	}
-//	return nil
-//}
+
 
 

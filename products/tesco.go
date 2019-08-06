@@ -1,7 +1,6 @@
 package products
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -20,13 +19,16 @@ func CallApi(g string) Product {
 	req, _ := http.NewRequest("GET", u, nil)
 	req.Header.Set("Ocp-Apim-Subscription-Key", "fb708b6003e94a32861a6c0556601af4")
 	resp, _ := client.Do(req)
-	body,err := ioutil.ReadAll(resp.Body)
+	body, _ := ioutil.ReadAll(resp.Body)
 
 	// Parse the response from JSON to Go
 	bs := []byte(body)
 	a := ApiResponse{}
 
-	err = json.Unmarshal(bs, &a)
+	err := json.Unmarshal(bs, &a)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	p := Product{}
 
@@ -34,7 +36,8 @@ func CallApi(g string) Product {
 	if len(a.Products) > 0 {
 		p = a.Products[0]
 		// Persist to the db
-		_, err = config.Products.InsertOne(context.TODO(), p)
+		pbs, err := json.Marshal(p)
+		_, err = config.Db.Exec("INSERT INTO products (gtin, info) VALUES ($1, $2)","0" + g, pbs )
 		if err != nil {
 			fmt.Println(err)
 		}

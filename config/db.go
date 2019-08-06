@@ -1,21 +1,31 @@
 package config
 
 import (
-	"context"
+	"database/sql"
 	"fmt"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
+	_ "github.com/lib/pq"
 )
 
-var Products *mongo.Collection
+var Db *sql.DB
 
+//Set up connection to the database
 func init() {
-	// get a mongo context
-	clientOptions := options.Client().ApplyURI("mongodb+srv://sapling:nHYuR4vtCeKUWPfz@cluster0-qe9ag.gcp.mongodb.net/test?w=majority")
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-	if err != nil { log.Fatal(err) }
+	var err error
+	Db, err = sql.Open(
+		"postgres",
+		//"postgres://postgres:21satoshi@localhost:5433/sapling?sslmode=disable"
+		"postgres://sapling:HJ7hyalql2mkMFp7@/sapling?host=/cloudsql/sapling:europe-west1:sapling",
+		)
+	if err != nil {
+		panic(err)
+	}
 
-	Products = client.Database("sapling").Collection("products")
-	fmt.Println("You connected to your mongo database.")
+
+	err = Db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Connected to database")
+
 }
