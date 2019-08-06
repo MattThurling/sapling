@@ -14,7 +14,7 @@ func init() {
 	Db, err = sql.Open(
 		"postgres",
 		//"postgres://postgres:21satoshi@localhost:5433/sapling?sslmode=disable"
-		"postgres://sapling:HJ7hyalql2mkMFp7@/sapling?host=/cloudsql/sapling:europe-west1:sapling",
+		"postgres://postgres:HJ7hyalql2mkMFp7@/sapling?host=/cloudsql/sapling:europe-west1:sapling",
 		)
 	if err != nil {
 		panic(err)
