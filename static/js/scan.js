@@ -1,6 +1,6 @@
 
 // https://www.dynamsoft.com/CustomerPortal/Portal/TrialLicense.aspx
-BarcodeReader.licenseKey = 't0068NQAAAA9xqcBsrb1DuHpiuyXSc3C7EdWbaxEagkUKVVNMdGTtUkeW4rNjxGV0DkaMn5OldSQJsnhkVKrT1os5WZDlvIU=';
+BarcodeReader.licenseKey = 't0068NQAAAG6yi5kCx2bAaEALB36Yhsk9OgzLadNZjJXj8OgZifmUZBZvO9oGvPMAHvNjOSwJIdhaJZcBrTQL5usgBfC1trE=';
 let scanner = new BarcodeReader.Scanner({
     onFrameRead: results => {
         hide();

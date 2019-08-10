@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"sapling/config"
 	"sapling/products"
+	"sapling/users"
 )
 
 
@@ -29,14 +30,9 @@ func iframe(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 	config.TPL.ExecuteTemplate(w, "iframe.gohtml", "")
 }
 
-func register(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
-	config.TPL.ExecuteTemplate(w, "register.gohtml", "")
+func dynam(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
+	config.TPL.ExecuteTemplate(w, "dynam.gohtml", "")
 }
-
-func login(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
-	config.TPL.ExecuteTemplate(w, "login.gohtml", "")
-}
-
 
 //Go application entrypoint
 func main() {
@@ -47,10 +43,15 @@ func main() {
 	router.GET("/scan", scan)
 	router.GET("/iframe", iframe)
 	router.GET("/product", products.Show)
-	router.GET("/register", register)
-	router.GET("/login", login)
+	router.GET("/register", users.Register)
+	router.POST("/register", users.Store)
+	router.GET("/login", users.Login)
+	router.POST("/login", users.PostLogin)
 	router.GET("/product/create", products.Create)
 	router.POST("/product/create", products.Store)
+	router.GET("/dashboard", users.Dashboard)
+
+	router.GET("/dynam", dynam)
 
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
 

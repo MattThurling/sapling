@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html>
-{{template "head.gohtml"}}
+<head>
+    {{template "head.gohtml"}}
+</head>
 <script src="https://kit.fontawesome.com/a0a098a18f.js"></script>
 <body class="deep">
+{{template "nav.gohtml"}}
 <div class="card deep border-0">
     <div class="card-body mx-auto">
         <h4 class="card-title mt-3 text-center text-light">Welcome back</h4>
         <p class="text-center text-light">Log into your account</p>
 
-        <form>
+        <form method="POST">
             <div class="form-group input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                 </div>
-                <input name="" class="form-control" placeholder="Email address" type="email">
+                <input name="email" class="form-control" placeholder="Email address" type="email">
             </div> <!-- form-group// -->
 
             <div class="form-group input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                 </div>
-                <input class="form-control" placeholder="Enter password" type="password">
+                <input name="password" class="form-control" placeholder="Enter password" type="password">
             </div> <!-- form-group// -->
 
             <div class="form-group">

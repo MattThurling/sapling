@@ -78,7 +78,7 @@ type Product struct {
 	} `json:"productAttributes"`
 }
 
-//Searches the db by gtin for a product and if it can't find one, calls the Tesco API
+//One searches the db by gtin for a product and if it can't find one, calls the Tesco API
 func One(r *http.Request) (Product, error) {
 	p := Product{}
 
