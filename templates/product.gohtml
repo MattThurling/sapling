@@ -6,55 +6,59 @@
     <body>
         {{template "nav.gohtml"}}
         <div class="container">
+
+            <div class="alert alert-info mt-2">
+                <strong>Psst!</strong> This product has not been scanned by anyone yet. To make it yours, simply <a class="text-info" href="/register">create a free account</a> and scan it again.
+            </div>
+
             <div class="row mt-4">
-                    <div class="col text-center">
-                        <h2>{{.Description}}</h2>
-                    </div>
+                <div class="col text-center">
+                    <h2>{{.Product.Description}}</h2>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col">
-                    </div>
-                    <div class="col-6 text-center">
-                        <!-- <img src="http://img.tesco.com/Groceries/pi/718/5018922117718/IDShot_90x90.jpg" class="img-fluid"> -->
-                    </div>
-                    <div class="col">
-                    </div>
+            <div class="row">
+                <div class="col">
                 </div>
+                <div class="col-6 text-center">
+                    <!-- <img src="http://img.tesco.com/Groceries/pi/718/5018922117718/IDShot_90x90.jpg" class="img-fluid"> -->
+                </div>
+                <div class="col">
+                </div>
+            </div>
 
-                <div class="card w-100 mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Carbon: <span class="text-danger">80g</span>
-                        </h5>
+            <div class="card w-100 mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Carbon: <span class="text-danger">80g</span>
+                    </h5>
 {{/*                        <p class="card-text">We estimated the impact using the <a href="https://www.iso.org/standard/71206.html">ISO 14067 standard</a>.</p>*/}}
 
-                    </div>
                 </div>
-
-
-
-                <table class="table mt-3">
-                    <tbody>
-
-                        <tr>
-                            <td>Weight</td>
-                            <td>{{.QtyContents.NetContents}}</td>
-                        </tr>
-
-                        {{ if .CalcNutrition}}
-                            {{ range .CalcNutrition.CalcNutrients}}
-                                <tr>
-                                    <td>{{ .Name}}</td>
-                                    <td>{{ .ValuePerServing}}</td>
-                                </tr>
-
-                            {{end}}
-                        {{end}}
-                    </tbody>
-                </table>
-
             </div>
+
+
+
+            <table class="table mt-3">
+                <tbody>
+
+                    <tr>
+                        <td>Weight</td>
+                        <td>{{.Product.QtyContents.NetContents}}</td>
+                    </tr>
+
+                    {{ if .Product.CalcNutrition}}
+                        {{ range .Product.CalcNutrition.CalcNutrients}}
+                            <tr>
+                                <td>{{ .Name}}</td>
+                                <td>{{ .ValuePerServing}}</td>
+                            </tr>
+
+                        {{end}}
+                    {{end}}
+                </tbody>
+            </table>
+
         </div>
 
     </body>

@@ -1,40 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-{{template "head.gohtml"}}
+    {{template "head.gohtml"}}
+    <script src="https://kit.fontawesome.com/a0a098a18f.js"></script>
 </head>
-<body>
-{{template "nav.gohtml"}}
-<div class="container">
-    <div class="row mt-4">
-        <div class="col text-center">
-            <h2>My Account</h2>
+    <body>
+    {{template "nav.gohtml"}}
+        <div class="container">
+            <div class="row mt-4">
+                <div class="col text-center">
+                    <img src="https://avatars.dicebear.com/v2/bottts/eliza.svg" width="100">
+                    <h2>{{.User.Name}}</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">3</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">4</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">20</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Products</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {{ range .}}
+                        <tr>
+                            <td>{{ .Gtin}}</td>
+                            <td>{{ .Gtin}}</td>
+                        </tr>
+
+                    {{end}}
+
+                </tbody>
+            </table>
+
         </div>
-    </div>
 
 
-    <table class="table mt-3">
-        <thead>
-            <tr>
-                <td>Name</td>
-                <td>Products</td>
-            </tr>
-        </thead>
-        <tbody>
-
-            {{ range .}}
-                <tr>
-                    <td>{{ .Gtin}}</td>
-                    <td>{{ .Gtin}}</td>
-                </tr>
-
-            {{end}}
-
-        </tbody>
-    </table>
-
-</div>
-</div>
-
-</body>
+    </body>
 </html>

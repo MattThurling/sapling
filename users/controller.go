@@ -6,8 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"sapling/config"
-	"sapling/products"
-	"sapling/sessions"
+	//"sapling/products"
 )
 
 //Register shows the form for registering a new user
@@ -18,7 +17,7 @@ func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 //Login shows the form for logging in an existing user and handles the form submission
 func Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 
-	if sessions.HasActiveSession(r) {
+	if Auth(r) {
 		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 		return
 	}
@@ -40,7 +39,7 @@ func Store(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		fmt.Fprintln(w, err)
 	}
 	//Create session for the user
-	s, err := sessions.Put(r, u.Id)
+	s, err := CreateSession(r, u.Id)
 
 	if err != nil {
 		fmt.Fprintln(w, err)
@@ -86,7 +85,7 @@ func PostLogin (w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 		// create session
 
-		s, err := sessions.Put(r, u.Id)
+		s, err := CreateSession(r, u.Id)
 
 		c := &http.Cookie{
 			Name:  "session",
@@ -100,30 +99,30 @@ func PostLogin (w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 //Dashboard shows the user dashboard
-func Dashboard(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
-	var ps []products.Product
-
-	rows, err := config.Db.Query("SELECT gtin FROM products")
-
-	if err != nil {
-		http.Error(w, http.StatusText(500), 500)
-		return
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		p := products.Product{}
-		err := rows.Scan(&p.Gtin)
-		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
-			return
-		}
-		ps = append(ps, p)
-	}
-	if err = rows.Err(); err != nil {
-		http.Error(w, http.StatusText(500), 500)
-		return
-	}
-
-	config.TPL.ExecuteTemplate(w, "dashboard.gohtml", ps)
-}
+//func Dashboard(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
+//	var ps []products.Product
+//
+//	rows, err := config.Db.Query("SELECT gtin FROM products")
+//
+//	if err != nil {
+//		http.Error(w, http.StatusText(500), 500)
+//		return
+//	}
+//	defer rows.Close()
+//
+//	for rows.Next() {
+//		p := products.Product{}
+//		err := rows.Scan(&p.Gtin)
+//		if err != nil {
+//			http.Error(w, http.StatusText(500), 500)
+//			return
+//		}
+//		ps = append(ps, p)
+//	}
+//	if err = rows.Err(); err != nil {
+//		http.Error(w, http.StatusText(500), 500)
+//		return
+//	}
+//
+//	config.TPL.ExecuteTemplate(w, "dashboard.gohtml", ps)
+//}

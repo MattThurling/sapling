@@ -1,4 +1,4 @@
-package products
+package main
 
 import (
 	"fmt"
@@ -12,24 +12,19 @@ import (
 )
 
 //Show a single product
-func Show(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func ShowProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
 
-	p, err := One(r)
+	v, err := One(r)
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
-	if p.Description == "" {
-		fmt.Println("Empty product")
-		http.Redirect(w, r, "/product/create", 303)
-	}
-
-	err = config.TPL.ExecuteTemplate(w, "product.gohtml", p)
+	err = config.TPL.ExecuteTemplate(w, "product.gohtml", v)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -37,7 +32,7 @@ func Show(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 //Show the form for creating a new product
-func Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func CreateProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
@@ -47,7 +42,7 @@ func Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 //Store a new product
-func Store(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func StoreProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	if r.Method != "POST" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return

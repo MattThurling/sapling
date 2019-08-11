@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"sapling/config"
+	"sapling/users"
 )
 
 
@@ -78,13 +79,20 @@ type Product struct {
 	} `json:"productAttributes"`
 }
 
+type Virgin struct {
+	Product Product
+	Virgin bool
+}
+
 //One searches the db by gtin for a product and if it can't find one, calls the Tesco API
-func One(r *http.Request) (Product, error) {
+//Returns virgin value depending on whether the product has been scanned before
+func One(r *http.Request) (Virgin, error) {
 	p := Product{}
+	virgin := Virgin{p, true}
 
 	g := r.FormValue("gtin")
 	if g == "" {
-		return p, errors.New("400. Bad Request.")
+		return virgin, errors.New("400. Bad Request.")
 	}
 
 	//Does the Gtin exist in the database?
@@ -97,20 +105,28 @@ func One(r *http.Request) (Product, error) {
 	err := row.Scan(&col)
 
 	if err == nil {
-		err = json.Unmarshal([]byte(col), &p)
+		err = json.Unmarshal([]byte(col), &virgin.Product)
 		if err != nil {
 			fmt.Println(err)
 		} else {
-			return p, nil
+			return virgin, nil
 		}
 	}
 
 	if err.Error() == "sql: no rows in result set" {
 		// No. Let's ask Tesco about it...
-		p = CallApi(g)
+		virgin.Virgin = false
+		virgin.Product = CallApi(g)
+		// Is the user authenticated?
+		u, err := users.AuthUser(r)
+		if err == nil && u.Email != "" {
+			// Yes. Link this product to the user
+			_, err = config.Db.Exec("INSERT INTO products_users (product_gtin, user_id) VALUES ($1, $2)", tg, u.Id)
+		}
 	}
 
-	return p, nil
+
+	return virgin, nil
 }
 
 func Put(r *http.Request) (Product, error) {

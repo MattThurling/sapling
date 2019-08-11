@@ -11,13 +11,6 @@ import (
 )
 
 
-
-type Product struct {
-	id uint
-	code string
-	carbon int
-}
-
 func home(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 	config.TPL.ExecuteTemplate(w, "home.gohtml", "")
 }
@@ -28,10 +21,6 @@ func scan(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 
 func iframe(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 	config.TPL.ExecuteTemplate(w, "iframe.gohtml", "")
-}
-
-func dynam(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
-	config.TPL.ExecuteTemplate(w, "dynam.gohtml", "")
 }
 
 //Go application entrypoint
@@ -50,8 +39,6 @@ func main() {
 	router.GET("/product/create", products.Create)
 	router.POST("/product/create", products.Store)
 	router.GET("/dashboard", users.Dashboard)
-
-	router.GET("/dynam", dynam)
 
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
 
