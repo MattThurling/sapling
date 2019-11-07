@@ -11,7 +11,7 @@ Dynamsoft.BarcodeScanner.createInstance({
     videoSettings: { video: { width: { ideal: 1280 }, height: {ideal: 720 }, facingMode: { ideal: 'environment' } } },
     runtimeSettings: {
         barcodeFormatIds: Dynamsoft.EnumBarcodeFormat.All,
-        localizationModes: [16,0,0,0,0,0,0,0],
+        localizationModes: [2,0,0,0,0,0,0,0],
         deblurLevel: 0
     },
     onFrameRead: function (results) {
@@ -95,7 +95,7 @@ Dynamsoft.BarcodeScanner.createInstance({
         });
     },
     onUnduplicatedRead: function (txt, result) {
-        window.location.href = "/product?gtin=" + txt;
+        window.location.href = "/product/" + txt;
         let _div = document.createElement('div');
         _div.className = 'rc-text';
 

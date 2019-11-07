@@ -7,33 +7,32 @@
     <body>
     {{template "nav.gohtml"}}
         <div class="container">
+            <div class="row">
+                <div class="col text-right">
+                    <a href="/logout" class="text-info"><i class="fa fa-sign-out"></i> Log out</a>
+                </div>
+            </div>
             <div class="row mt-4">
                 <div class="col text-center">
-                    <img src="https://avatars.dicebear.com/v2/bottts/eliza.svg" width="100">
-                    <h2>{{.User.Name}}</h2>
+                    <img src="https://avatars.dicebear.com/v2/bottts/{{.U.Name}}.svg" width="100">
+                    <h2>{{.U.Name}}</h2>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">3</h5>
-                        </div>
+                    <div class="card-body text-center">
+                        <h2 class="card-title">{{len .Ps}}</h2>
                     </div>
                 </div>
                 <div class="col-4">
-                    <div class="card">
                         <div class="card-body text-center">
-                            <h5 class="card-title">4</h5>
+                            <h2 class="card-title"><i class="fa fa-award text-success"></i></h2>
                         </div>
-                    </div>
                 </div>
                 <div class="col-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">20</h5>
-                        </div>
+                    <div class="card-body text-center">
+                        <h2 class="card-title"><i class="fa fa-trophy text-warning"></i></h2>
                     </div>
                 </div>
             </div>
@@ -42,16 +41,16 @@
             <table class="table mt-3">
                 <thead>
                     <tr>
-                        <td>Name</td>
-                        <td>Products</td>
+                        <th scope="col">Product</th>
+                        <th scope="col">C02</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    {{ range .}}
+                    {{ range .Ps}}
                         <tr>
-                            <td>{{ .Gtin}}</td>
-                            <td>{{ .Gtin}}</td>
+                            <td><a class="text-secondary" href="/product/{{.Ean}}">{{or .Name "Unknown Product"}}</a></td>
+                            <td>-</td>
                         </tr>
 
                     {{end}}
@@ -59,6 +58,11 @@
                 </tbody>
             </table>
 
+            <div class="row">
+                <div class="col text-center">
+                    <a class="btn btn-info" href="/scan" role="button">Scan a Product</a>
+                </div>
+            </div>
         </div>
 
 

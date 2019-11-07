@@ -14,8 +14,8 @@ func init() {
 	//datastoreName := os.Getenv("POSTGRES_CONNECTION")
 	Db, err = sql.Open(
 		"postgres",
-		//"postgres://postgres:21satoshi@localhost:5433/sapling?sslmode=disable",
-		"postgres://postgres:HJ7hyalql2mkMFp7@localhost:5434/sapling?sslmode=disable",
+		//"postgres://postgres:21satoshi@localhost:5433/sapling?sslmode=disable", // running Postgres locally
+		"postgres://postgres:HJ7hyalql2mkMFp7@localhost:5434/sapling?sslmode=disable", // running Postgres via proxy
 		//datastoreName,
 		)
 	if err != nil {

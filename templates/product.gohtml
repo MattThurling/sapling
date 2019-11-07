@@ -3,52 +3,123 @@
     <head>
         {{template "head.gohtml"}}
     </head>
-    <body>
+    <form>
         {{template "nav.gohtml"}}
         <div class="container">
-
-            <div class="alert alert-info mt-2">
-                <strong>Psst!</strong> This product has not been scanned by anyone yet. To make it yours, simply <a class="text-info" href="/register">create a free account</a> and scan it again.
-            </div>
-
-            <div class="row mt-4">
-                <div class="col text-center">
-                    <h2>{{.Product.Description}}</h2>
+            {{if .P.Virgin}}
+                <div class="alert alert-info mt-2">
+                    {{if .Auth}}
+                        <strong>Congratulations!</strong> This product has not been scanned by anyone yet. We've added it to <a class="text-info" href="/dashboard">your list.</a>
+                    {{else}}
+                        This product has not been scanned by anyone yet. To make it yours, simply <a class="text-info" href="/register">create a free account</a> and scan it again.
+                    {{end}}
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
+            {{end}}
+            <form method="POST">
+                <div class="row mt-4">
+                    <div class="col text-center" id="title-fix">
+                        <h2>
+                            {{or .P.Name "Unknown Product"}} {{ if .Auth }}<a href=""><img id="pencil" src="/static/img/svg/pencil.svg" width="16" alt="Edit"></a>{{ end }}
+                        </h2>
+                    </div>
+                    <div class="col text-center" id="title-editable" style="display: none;">
+                        <input name="name" type="text" class="form-control mb-3 updatable" value="{{or .P.Name "Unknown Product"}}">
+                    </div>
                 </div>
-                <div class="col-6 text-center">
-                    <!-- <img src="http://img.tesco.com/Groceries/pi/718/5018922117718/IDShot_90x90.jpg" class="img-fluid"> -->
-                </div>
-                <div class="col">
-                </div>
-            </div>
 
-            <div class="card w-100 mt-3">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        Carbon: <span class="text-danger">80g</span>
-                    </h5>
-{{/*                        <p class="card-text">We estimated the impact using the <a href="https://www.iso.org/standard/71206.html">ISO 14067 standard</a>.</p>*/}}
-
+                <div class="row">
+                    <div class="col">
+                    </div>
+                    <div class="col-6 text-center">
+                        <!-- <img src="http://img.tesco.com/Groceries/pi/718/5018922117718/IDShot_90x90.jpg" class="img-fluid"> -->
+                    </div>
+                    <div class="col">
+                    </div>
                 </div>
-            </div>
 
+                <div class="row">
+                    <div class="col text-center">
+                        <p class="text-secondary mb-0"><small>CARBON FOOTPRINT</small></p>
+                            <h2 class="text-warning mb-0"><strong>{{ .F }}</strong></h2>
+                        <p class="text-secondary"><small>g net CO2 eq emissions</small></p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sort" class="control-label">Type</label>
+                    <select class="form-control updatable" name="category-id">
+                        <option value="" selected>Which category best describes this product?</option>
+                        <option disabled>──────────</option>
+                        {{ range .Categories }}
+                                <option
+                                        value="{{ .Id }}"
+                                        {{ if eq .Id $.P.CategoryId }} selected {{ end }}>
+                                    {{ .Name }}
+                                </option>
+                        {{ end }}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sort" class="control-label">Origin</label>
+                    <select class="form-control updatable" name="country-id">
+                        <option value="" selected>Where is this product from?</option>
+                        <option disabled>──────────</option>
+                        {{ range .Countries }}
+                            <option
+                                    value="{{ .Id }}"
+                                    {{ if eq .Id $.P.CountryId }} selected {{ end }}>
+                                {{ .Name }}
+                            </option>
+                        {{ end }}
+                    </select>
+                </div>
+
+
+                <label for="sort" class="control-label">Quantity</label>
+                <div class="input-group">
+                    <input name="quantity" type="text" class="form-control updatable" value="{{ .P.Quantity }}">
+                    <div class="input-group-append">
+                        <select name="unit-id" class="form-control updatable">
+                            <option value="1">g</option>
+                            <option value="1">kg</option>
+                            <option value="12">ml</option>
+                            <option value="12">l</option>
+                        </select>
+                    </div>
+                </div>
+
+                {{ if .Auth }}
+                    <div class="card bg-light mt-4 mb-4">
+                        <div class="card-body">
+                            <p>Is the information above <strong>complete</strong> and <strong>correct</strong>? If not, would you mind fixing it for us? 😇</p>
+                            <button class="btn btn-info" type="submit" formmethod="post" id="submit" disabled>Update</button>
+                        </div>
+                    </div>
+                {{ end }}
+            </form>
 
 
             <table class="table mt-3">
                 <tbody>
+                <tr>
+                    <td>
+                        EAN
+                    </td>
+                    <td>
+                        <a class="text-secondary" target="_blank" href="https://google.com/search?q={{ .P.Ean }}">{{ .P.Ean }}</a>
+                    </td>
+                </tr>
 
-                    <tr>
-                        <td>Weight</td>
-                        <td>{{.Product.QtyContents.NetContents}}</td>
-                    </tr>
+                {{if .P.Info.QtyContents.NetContents}}
+                        <tr>
+                            <td>Weight</td>
+                            <td>{{.P.Info.QtyContents.NetContents}}</td>
+                        </tr>
+                    {{end}}
 
-                    {{ if .Product.CalcNutrition}}
-                        {{ range .Product.CalcNutrition.CalcNutrients}}
+                    {{ if .P.Info.CalcNutrition}}
+                        {{ range .P.Info.CalcNutrition.CalcNutrients}}
                             <tr>
                                 <td>{{ .Name}}</td>
                                 <td>{{ .ValuePerServing}}</td>
@@ -60,6 +131,7 @@
             </table>
 
         </div>
+    <script src="/static/js/product.js"></script>
 
     </body>
 </html>

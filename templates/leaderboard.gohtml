@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{template "head.gohtml"}}
+    <script src="https://kit.fontawesome.com/a0a098a18f.js"></script>
+</head>
+<body>
+    {{template "nav.gohtml"}}
+    <div class="container">
+
+        <div class="row mt-4">
+            <div class="col text-center">
+                <h2>Leaderboard</h2>
+            </div>
+        </div>
+
+
+        <table class="table mt-3">
+            <thead>
+            <tr>
+                <th></th>
+                <th scope="col">Name</th>
+                <th scope="col">Score</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {{ range .}}
+                <tr>
+                    <td class="pt-2"><img src="https://avatars.dicebear.com/v2/bottts/{{.Name}}.svg" width="20"></td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Score}}</td>
+                </tr>
+
+            {{end}}
+
+            </tbody>
+        </table>
+    </div>
+
+
+</body>
+</html>

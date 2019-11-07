@@ -2,7 +2,7 @@ runtime: go
 #Here we select the AppEngine Flex environment which performs a lot of the backend preparation for us including the ability to scale give the demand
 env: flex
 env_variables:
-  POSTGRES_CONNECTION: "user=postgres password=HJ7hyalql2mkMFp7 dbname=postgres host=/cloudsql/sapling:europe-west1:sapling"
+  POSTGRES_CONNECTION: "user=postgres password=HJ7hyalql2mkMFp7 dbname=sapling host=/cloudsql/sapling:europe-west1:sapling"
 #Creates a  single instance that manually scales
 manual_scaling:
   instances: 1
@@ -13,3 +13,8 @@ resources:
   disk_size_gb: 10
 beta_settings:
   cloud_sql_instances: sapling:europe-west1:sapling
+handlers:
+  - url: /.*
+    script: _go_app
+    secure: always
+    redirect_http_response_code: 301

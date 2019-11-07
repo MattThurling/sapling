@@ -1,4 +1,4 @@
-package cloudvision
+package main
 
 import (
 	"context"
