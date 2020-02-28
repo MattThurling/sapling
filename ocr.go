@@ -22,6 +22,7 @@ func ocrForm(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 //storeProduct handles the upload of an image and sends it for OCR
 func ocrUpload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	enableCors(&w)
 	if r.Method != "POST" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return

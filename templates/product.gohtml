@@ -15,90 +15,34 @@
                     {{end}}
                 </div>
             {{end}}
-            <form method="POST">
-                <div class="row mt-4">
-                    <div class="col text-center" id="title-fix">
-                        <h2>
-                            {{or .P.Name "Unknown Product"}} {{ if .Auth }}<a href=""><img id="pencil" src="/static/img/svg/pencil.svg" width="16" alt="Edit"></a>{{ end }}
-                        </h2>
-                    </div>
-                    <div class="col text-center" id="title-editable" style="display: none;">
-                        <input name="name" type="text" class="form-control mb-3 updatable" value="{{or .P.Name "Unknown Product"}}">
-                    </div>
+
+            <div class="row mt-4">
+                <div class="col text-center" id="title-fix">
+                    <h2>
+                        {{or .P.Name "Unknown Product"}} {{ if .Auth }}<a href=""><img id="pencil" src="/static/img/svg/pencil.svg" width="16" alt="Edit"></a>{{ end }}
+                    </h2>
                 </div>
-
-                <div class="row">
-                    <div class="col">
-                    </div>
-                    <div class="col-6 text-center">
-                        <!-- <img src="http://img.tesco.com/Groceries/pi/718/5018922117718/IDShot_90x90.jpg" class="img-fluid"> -->
-                    </div>
-                    <div class="col">
-                    </div>
+                <div class="col text-center" id="title-editable" style="display: none;">
+                    <input name="name" type="text" class="form-control mb-3 updatable" value="{{or .P.Name "Unknown Product"}}">
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col text-center">
-                        <p class="text-secondary mb-0"><small>CARBON FOOTPRINT</small></p>
-                            <h2 class="text-warning mb-0"><strong>{{ .F }}</strong></h2>
-                        <p class="text-secondary"><small>g net CO2 eq emissions</small></p>
-                    </div>
+            <div class="row">
+                <div class="col">
                 </div>
-
-                <div class="form-group">
-                    <label for="sort" class="control-label">Type</label>
-                    <select class="form-control updatable" name="category-id">
-                        <option value="" selected>Which category best describes this product?</option>
-                        <option disabled>──────────</option>
-                        {{ range .Categories }}
-                                <option
-                                        value="{{ .Id }}"
-                                        {{ if eq .Id $.P.CategoryId }} selected {{ end }}>
-                                    {{ .Name }}
-                                </option>
-                        {{ end }}
-                    </select>
+                <div class="col-6 text-center">
+                    <!-- <img src="http://img.tesco.com/Groceries/pi/718/5018922117718/IDShot_90x90.jpg" class="img-fluid"> -->
                 </div>
-
-                <div class="form-group">
-                    <label for="sort" class="control-label">Origin</label>
-                    <select class="form-control updatable" name="country-id">
-                        <option value="" selected>Where is this product from?</option>
-                        <option disabled>──────────</option>
-                        {{ range .Countries }}
-                            <option
-                                    value="{{ .Id }}"
-                                    {{ if eq .Id $.P.CountryId }} selected {{ end }}>
-                                {{ .Name }}
-                            </option>
-                        {{ end }}
-                    </select>
+                <div class="col">
                 </div>
+            </div>
 
-
-                <label for="sort" class="control-label">Quantity</label>
-                <div class="input-group">
-                    <input name="quantity" type="text" class="form-control updatable" value="{{ .P.Quantity }}">
-                    <div class="input-group-append">
-                        <select name="unit-id" class="form-control updatable">
-                            <option value="1">g</option>
-                            <option value="1">kg</option>
-                            <option value="12">ml</option>
-                            <option value="12">l</option>
-                        </select>
-                    </div>
+            <div class="row">
+                <div class="col text-center">
+                    <p class="text-secondary mb-0"><small>CARBON FOOTPRINT</small></p>
+                    <h2 class="text-warning mb-0"><strong>{{ .F }}</strong></h2>
                 </div>
-
-                {{ if .Auth }}
-                    <div class="card bg-light mt-4 mb-4">
-                        <div class="card-body">
-                            <p>Is the information above <strong>complete</strong> and <strong>correct</strong>? If not, would you mind fixing it for us? 😇</p>
-                            <button class="btn btn-info" type="submit" formmethod="post" id="submit" disabled>Update</button>
-                        </div>
-                    </div>
-                {{ end }}
-            </form>
-
+            </div>
 
             <table class="table mt-3">
                 <tbody>

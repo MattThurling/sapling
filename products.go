@@ -92,6 +92,7 @@ type Product struct {
 	UnitId int
 	Quantity int
 	Virgin bool
+	Footprint string
 }
 
 //findProduct searches the db by ean for a product and if it can't find one, calls the Tesco API
@@ -239,10 +240,24 @@ func callTescoApi(g string) Info {
 	// Check to see if there were any products returned
 	if len(a.Products) > 0 {
 		i = a.Products[0]
+		// Product exists, call our footprint API
 		if err != nil {
 			fmt.Println(err)
 		}
 	}
 
 	return i
+}
+
+func callFootprintApi(g string) string {
+	// Call the Tesco API
+	client := &http.Client{}
+	u := "https://footprint-dot-sapling.appspot.com/using-tesco/gtin/" + g
+	req, _ := http.NewRequest("GET", u, nil)
+	resp, _ := client.Do(req)
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	fmt.Println(body)
+	return string(body)
+
 }
